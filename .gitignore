@@ -49,3 +49,6 @@ backend/.env
 .vscode/
 *.swp
 *.swo
+
+# Databases
+*.sqlite3

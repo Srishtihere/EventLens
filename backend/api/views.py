@@ -15,6 +15,26 @@ from .ai_services import (
     analyze_talk_effectiveness,
     generate_event_report
 )
+from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated
+from .models import UserProfile
+from .serializers import UserProfileSerializer
+
+@api_view(['GET', 'PUT'])
+@permission_classes([IsAuthenticated])
+def user_profile(request):
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+    
+    if request.method == 'GET':
+        serializer = UserProfileSerializer(profile)
+        return Response(serializer.data)
+    
+    elif request.method == 'PUT':
+        serializer = UserProfileSerializer(profile, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
 
 db = get_db()
 

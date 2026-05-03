@@ -1,8 +1,8 @@
-# DevSupport 🎙️🧠
+# EventLens 🎙️🧠
 
-**DevSupport** is an AI-powered post-event intelligence and learning platform. 
+**EventLens** is an AI-powered post-event intelligence and learning platform. 
 
-Instead of letting valuable tech talks, workshops, and conference sessions gather dust on YouTube, DevSupport transforms event recordings into highly structured, actionable, and personalized learning experiences for attendees. For organizers, it provides deep analytics into audience engagement and speaker effectiveness.
+Instead of letting valuable tech talks, workshops, and conference sessions gather dust on YouTube, EventLens transforms event recordings into highly structured, actionable, and personalized learning experiences for attendees. For organizers, it provides deep analytics into audience engagement and speaker effectiveness.
 
 ---
 

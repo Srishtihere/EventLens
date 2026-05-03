@@ -1,27 +1,32 @@
 import os
 import google.generativeai as genai
-from openai import OpenAI
 from django.conf import settings
 
 # Load API keys (will be mocked if not present)
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 
 if GEMINI_API_KEY:
     genai.configure(api_key=GEMINI_API_KEY)
 
-openai_client = OpenAI(api_key=OPENAI_API_KEY) if OPENAI_API_KEY else None
-
 def transcribe_audio(file_path):
-    if not openai_client:
-        return "This is a mock transcript because OPENAI_API_KEY is not set. The talk covered React best practices, managing state, and avoiding unnecessary re-renders. It was very informative."
+    if not GEMINI_API_KEY:
+        return "This is a mock transcript because GEMINI_API_KEY is not set. The talk covered React best practices, managing state, and avoiding unnecessary re-renders. It was very informative."
     
-    with open(file_path, "rb") as audio_file:
-        transcript = openai_client.audio.transcriptions.create(
-            model="whisper-1",
-            file=audio_file
-        )
-    return transcript.text
+    try:
+        # Upload the file to the Gemini File API
+        # Note: Gemini 1.5 Flash is excellent for audio transcription and is free (within limits)
+        audio_file = genai.upload_file(path=file_path)
+        
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        response = model.generate_content([
+            "Please provide a high-accuracy, word-for-word transcript of this audio file. Just the raw text, no intro/outro.",
+            audio_file
+        ])
+        
+        return response.text
+    except Exception as e:
+        print(f"Gemini transcription error: {e}")
+        return "Error during transcription. Please check your API key and file format."
 
 def generate_learning_modes(transcript):
     if not GEMINI_API_KEY:
